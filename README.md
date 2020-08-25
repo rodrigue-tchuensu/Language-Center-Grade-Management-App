@@ -204,3 +204,14 @@ Here are the various screens you should be able to use once the application is s
     <img width="800" src="./images/student_view.PNG">
 </p>
 
+
+
+## Contributors
+
+Rodrigue Tchuensu Pouopse 
+
+
+
+## License
+
+This project is licensed under the terms of the MIT license.
