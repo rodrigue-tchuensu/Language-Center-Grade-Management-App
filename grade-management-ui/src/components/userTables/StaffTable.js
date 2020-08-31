@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+//import { makeStyles, withStyles } from '@material-ui/core/styles';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import { Button,} from '@material-ui/core';
 import {Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
@@ -8,6 +8,7 @@ import DetailInputTag from './DetailInputTag';
 const request = require ('../../resources/request');
 
 
+/*
 const useStyles = makeStyles(theme => ({
     title:{
         textAlign: 'center',
@@ -31,7 +32,7 @@ const styles = theme => ({
         textAlign: 'center',
     },
 })
-
+*/
 
   
 
@@ -74,7 +75,7 @@ class StaffTable extends React.Component {
 
         return (
             
-            <div>
+            <>
                 <MaterialTable
                     title={tableTitle}
                     columns={[
@@ -104,7 +105,6 @@ class StaffTable extends React.Component {
                                         console.log("Succes: The staff detail data was successfully loaded\n You can see the response below")
                                         console.log(res)
                                         this.setState({ detailData: res.body, showDetails: true})
-                                        //this.setState({showDetails: true})
                                     }
                                 })
                             }
@@ -134,7 +134,7 @@ class StaffTable extends React.Component {
                 >
                     <DialogTitle id="more-info-dialog-title">Staff Detail Information</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
+                        
                             <DetailInputTag labelName="Staff Number:" inputValue={this.state.detailData.staffNumber}/>
                             <DetailInputTag labelName="First Name:" inputValue={this.state.detailData.firstname}></DetailInputTag>
                             <DetailInputTag labelName="Last Name:" inputValue={this.state.detailData.lastname}/>
@@ -143,15 +143,14 @@ class StaffTable extends React.Component {
                             <DetailInputTag labelName="Email:" inputValue={this.state.detailData.email}/>
                             <DetailInputTag labelName="Office Phone Number:" inputValue={this.state.detailData.officePhoneNumber}/>
                             <DetailInputTag labelName="Office Number:" inputValue={this.state.detailData.officeNumber}/>
-                        </DialogContentText>
+                        
                     </DialogContent>
                     <DialogActions>
                         <Button color="primary" onClick={this.handleCloseDialog} >Close</Button>
                     </DialogActions>
                 </Dialog>
-
-            </div>
+            </>
         );
     }  
 }
-export default withStyles(styles)(StaffTable);
+export default StaffTable;

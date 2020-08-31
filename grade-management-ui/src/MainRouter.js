@@ -31,7 +31,7 @@ class MainRouter extends Component {
             <Route exact path="/" component={Login}/>
             <Route exact path="/login" component={Login}/>
             <PrivateRoute exact path="/staffs/:menu/:option" component={Staff}/>
-            <PrivateRoute exact path="/students" component={Student}/>
+            <PrivateRoute exact path="/students/:user/:option" component={Student}/>
             </Switch>
     
         </div>)

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles} from '@material-ui/core/styles';
 import MaterialTable, { MTableToolbar } from 'material-table'
 import {Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 import {Button,} from '@material-ui/core';
@@ -24,7 +24,7 @@ export default function StudentTable(props) {
         const [studentsLimitedData, setStudentsLimitedData] = useState([])
         const [studentsDetailedData, setStudentsDetailedData] = useState({})
         const [showDetails, setShowDetails] = useState(false)
-        const classes = useStyles();
+        //const classes = useStyles();
         const tableTitle = props.tableTitle;
 
         const handleCloseDialog = () => {
@@ -48,7 +48,7 @@ export default function StudentTable(props) {
 
         return (
             
-            <div>
+            <>
 
                 <MaterialTable
                     title={tableTitle}
@@ -111,22 +111,22 @@ export default function StudentTable(props) {
                 >
                     <DialogTitle id="more-info-dialog-title">Student Detail Information</DialogTitle>
                     <DialogContent>
-                        <DialogContentText>
-                            <DetailInputTag labelName="Student Number:" inputValue={studentsDetailedData.studentNumber}/>
-                            <DetailInputTag labelName="First Name:" inputValue={studentsDetailedData.firstname}></DetailInputTag>
-                            <DetailInputTag labelName="Last Name:" inputValue={studentsDetailedData.lastname}/>
-                            <DetailInputTag labelName="Date of Birth:" inputValue={studentsDetailedData.dateOfBirth}/>
-                            <DetailInputTag labelName="Phone Number:" inputValue={studentsDetailedData.phoneNumber}/>
-                            <DetailInputTag labelName="Email:" inputValue={studentsDetailedData.email}/>
-                            <DetailInputTag labelName="Current Level:" inputValue={studentsDetailedData.currentLevel}/>
-                        </DialogContentText>
+                        
+                        <DetailInputTag labelName="Student Number:" inputValue={studentsDetailedData.studentNumber}/>
+                        <DetailInputTag labelName="First Name:" inputValue={studentsDetailedData.firstname}></DetailInputTag>
+                        <DetailInputTag labelName="Last Name:" inputValue={studentsDetailedData.lastname}/>
+                        <DetailInputTag labelName="Date of Birth:" inputValue={studentsDetailedData.dateOfBirth}/>
+                        <DetailInputTag labelName="Phone Number:" inputValue={studentsDetailedData.phoneNumber}/>
+                        <DetailInputTag labelName="Email:" inputValue={studentsDetailedData.email}/>
+                        <DetailInputTag labelName="Current Level:" inputValue={studentsDetailedData.currentLevel}/>
+                    
                     </DialogContent>
                     <DialogActions>
                         <Button color="primary" onClick={handleCloseDialog} >Close</Button>
                     </DialogActions>
                 </Dialog>
 
-            </div>
+            </>
         );
     
 }

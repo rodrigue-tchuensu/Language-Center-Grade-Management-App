@@ -81,15 +81,19 @@ const auth = {
         return false
     },
 
-    authenticate(jwt, cb) {
+    authenticate(jwt, callback) {
       sessionStorage.setItem('jwt', JSON.stringify(jwt))
-      //console.log("Authenticate method (jwt payload) =>  " + JSON.stringify(JSON.parse(atob(jwt.split('.')[1]))) )
-      cb()
+      if(typeof callback === 'function' && callback()) {
+        callback()
+      }
+      
     },
 
-    logout(cb) {
+    logout(callback) {
       sessionStorage.removeItem('jwt')
-      cb()
+      if(typeof callback === 'function' && callback()) {
+        callback()
+      }
     },
 
     decodeJWT(token){
@@ -109,7 +113,6 @@ const auth = {
         studentOrStaffNumber: jwtPayload.studentOrStaffNumber,
         roles: jwtPayload.roles,
       }
-      //console.log(JSON.stringify(userDetails))
       return userDetails
     }
   }

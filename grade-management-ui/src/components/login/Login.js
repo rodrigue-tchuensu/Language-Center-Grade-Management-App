@@ -3,16 +3,13 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Paper from '@material-ui/core/Paper';
-import Box from '@material-ui/core/Box';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 
+//image source: https://images.app.goo.gl/GVfAtDhD2wsu6opD7
 import backgroundImage from './../../assets/foreign_language_books.jpg'
 const request = require ('../../resources/request');
 
@@ -52,9 +49,24 @@ export default function Login(props) {
   const classes = useStyles();
   const [username, setUserName] = useState("")
   const [password, setPassword] = useState("")
-  const [isLoginSuccessful, setIsLoginSuccessful] = useState(false)
 
-  const handleOnSignInButtonClick = () => {
+
+  const redirect = () => {
+    const userDetail = request.auth.getAvailableUserDetails()
+
+    if(userDetail.roles.indexOf("ROLE_STAFF_ADMIN") > -1 || userDetail.roles.indexOf("ROLE_STAFF_MANAGER") > -1 || userDetail.roles.indexOf("ROLE_STAFF_TEACHER") > -1 ) {
+      
+      props.history.push('/staffs/accounts/view')
+      
+    } else if(userDetail.roles.indexOf("ROLE_STUDENT") > -1){
+      
+      props.history.push(`/students/${userDetail.username.replace('.', '-')}/report-card`)
+
+    }
+  }
+
+
+  const handleOnSignInButtonClick = (event) => {
 
     const credential = {
       username: username || undefined,
@@ -66,28 +78,14 @@ export default function Login(props) {
         console.log(err)
       } else {
         console.log(res)
-
-        request.auth.authenticate(res.header.authorization.split(' ')[1], () => {
-          setIsLoginSuccessful(true)
-        })
+        request.auth.authenticate(res.header.authorization.split(' ')[1])
+        redirect()
       }
     })
+    event.preventDefault()
   }
 
-  const updateComponent = () => {
-    const userDetail = request.auth.getAvailableUserDetails()
-
-    if(userDetail.roles.indexOf("ROLE_STAFF_ADMIN") > -1 || userDetail.roles.indexOf("ROLE_STAFF_MANAGER") > -1 || userDetail.roles.indexOf("ROLE_STAFF_TEACHER") > -1 ) {
-      
-      props.history.push('/staffs/accounts/view')
-      
-    } else if(userDetail.roles.indexOf("ROLE_STUDENT") > -1){
-      
-      props.history.push('/students')
-
-    }
-  }
-
+  
   const handleOnUsernameTextfieldChange = (event) => {
     setUserName(event.target.value)
   }
@@ -95,15 +93,8 @@ export default function Login(props) {
   const handleOnPasswordTextfieldChange = (event) => {
     setPassword(event.target.value)
   }
-  
-  useEffect(() => {
-    if(isLoginSuccessful) {
-      updateComponent()
-    }
-  })
 
   return (
-    
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
@@ -115,6 +106,7 @@ export default function Login(props) {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+          <form className={classes.form} onSubmit={handleOnSignInButtonClick} >
             <TextField
               variant="outlined"
               margin="normal"
@@ -147,12 +139,16 @@ export default function Login(props) {
               variant="contained"
               color="primary"
               className={classes.submit}
-              onClick={handleOnSignInButtonClick}
             >
               Sign In
             </Button>
+          </form>
         </div>
       </Grid>
     </Grid>
   );
 }
+
+
+// This form is derived from the material ui templates examples
+// src: https://github.com/mui-org/material-ui/blob/master/docs/src/pages/getting-started/templates/sign-in-side/SignInSide.js

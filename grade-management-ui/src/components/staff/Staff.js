@@ -1,20 +1,70 @@
 import React from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Toolbar from '@material-ui/core/Toolbar';
+import {Paper} from '@material-ui/core';
 
-
-import HeaderAndSidebar from   '../header/HeaderAndSidebar'
+import Header from '../header/Header'
+import Sidebar from '../sidebar/Sidebar'
+//import HeaderAndSidebar from   '../header/HeaderAndSidebar'
 import OverviewAccounts from   './OverviewAccounts'
 import CreateAccount    from   './CreateAccount'
 import ScheduleExam     from   './ScheduleExam'
 import MarksManagement  from   './MarksManagement'
+import PasswordChange   from   '../credentials/PasswordChange'
 
 const request = require('../../resources/request')
 
 
+const drawerWidth = 240;
+
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    minHeight: '100vh',
+  },
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerContainer: {
+    overflow: 'auto',
+  },
+  paperMain: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    minHeight: '100%',
+  },
+
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+  nested: {
+    paddingLeft: theme.spacing(4),
+  },
+  table: {
+    minWidth: 1000,
+  },
+  paper: {
+    width: '100%',
+    marginBottom: theme.spacing(2),
+  },
+});
 
 
 
-class Admin extends React.Component {
+
+
+class Staff extends React.Component {
 
     constructor(props){
         super(props);
@@ -48,7 +98,11 @@ class Admin extends React.Component {
           //ScheduleExam component props
           examDate: "",
           examLevel: "A1", //default value
-
+          A1Checked: false,
+          A2Checked: false,
+          B1Checked: false,
+          B2Checked: false,
+          C1Checked: false,
         }
     }
 
@@ -64,12 +118,26 @@ class Admin extends React.Component {
         return null;
     }
 
-    
-
-    /*componentDidMount(){
-        this.setState({staffView: this.props.match.params.option})
-    }*/
-
+    clearCreateAccountFormOnAccountCreationSuccessful = () => {
+        this.setState({
+            accountType: "student-account",
+            isStaffAccount: false,
+            ROLE_STAFF_ADMIN: false,
+            ROLE_STAFF_MANAGER: false,
+            ROLE_STAFF_TEACHER: false,
+            firstname: "",
+            lastname: "",
+            dateOfBirth: "",
+            phoneNumber: "",
+            email: "",
+            currentLevel: "A1",
+            officePhoneNumber: "",
+            officeNumber: "",
+            openConfirmationDialog: false,
+            accountCreationInProgress: false,
+            accountCreationSuccess: false,
+        })
+    }
 
 
     // Eventhandler for the sidebar component
@@ -148,9 +216,6 @@ class Admin extends React.Component {
     handleConfirmButtonClick = () => {
 
         this.setState({openConfirmationDialog: false})
-        if(!this.state.accountCreationInProgress) {
-            this.setState({accountCreationInProgress: true})
-        }
         
         const rolesDto = []
         const userData = {
@@ -181,22 +246,21 @@ class Admin extends React.Component {
             const staffDto = userData
             const staffAccountDataDto = {staffDto, rolesDto}
 
-            console.log("representation of the staffAccountDataDto => \n " + staffAccountDataDto )
+           //console.log("representation of the staffAccountDataDto => \n " + staffAccountDataDto )
             
             
             request.post('staffs',staffAccountDataDto, (err, res) => {
                 
                 if(err) {
-                    console.log("Error_Staff_Account_Creation: the api post request, reported an error! \n See error response below: ")
+                    //console.log("Error_Staff_Account_Creation: the api post request, reported an error! \n See error response below: ")
                     //console.log(err)
                     this.setState({accountCreationSuccess: false})
-                    this.setState({accountCreationInProgress: false})
                 }
                 else {
-                    console.log("Success: the api post request was successful! \n See success response below")
-                    console.log(res)
+                    //console.log("Success: the api post request was successful! \n See success response below")
+                    //console.log(res)
                     this.setState({accountCreationSuccess: true})
-                    this.setState({accountCreationInProgress: false})
+                    this.clearCreateAccountFormOnAccountCreationSuccessful()
                 }
             });
 
@@ -206,7 +270,7 @@ class Admin extends React.Component {
             
             const studentDto = userData;
             const studentAccountDataDto = {studentDto, rolesDto}
-            console.log("representation of the studentAccountDataDto => \n " + JSON.stringify(studentAccountDataDto) )
+            //console.log("representation of the studentAccountDataDto => \n " + JSON.stringify(studentAccountDataDto) )
 
             request.post('students', studentAccountDataDto, (err, res) => {
 
@@ -214,13 +278,12 @@ class Admin extends React.Component {
                     console.log("Error_Student_Account_Creation: the api post request, reported an error! \n See error response below: ")
                     //console.log(err)
                     this.setState({accountCreationSuccess: false})
-                    this.setState({accountCreationInProgress: false})
                 }
                 else {
                     console.log("Success: the api post request was successful! \n See success response below")
                     console.log(res)
                     this.setState({accountCreationSuccess: true})
-                    this.setState({accountCreationInProgress: false})
+                    this.clearCreateAccountFormOnAccountCreationSuccessful()
                 }
             });
         }
@@ -231,22 +294,44 @@ class Admin extends React.Component {
         this.setState({[stateProp]: value})
     }
 
+    handleScheduleExamCheckBoxChanges = (stateProp, value) => {
+        this.setState({[stateProp]: value})
+    }
+
     handleScheduleExamScheduleButtonClick = () => {
-        const examDto = {
-            examLevel: this.state.examLevel || undefined,
+
+        const scheduledExamsDataDto = {
             examDate: this.state.examDate || undefined,
+            examLevels:[]
+        }
+        if(this.state.A1Checked) {
+            scheduledExamsDataDto.examLevels.push('A1')
+        }
+        if(this.state.A2Checked) {
+            scheduledExamsDataDto.examLevels.push('A2')
+        }
+        if(this.state.B1Checked) {
+            scheduledExamsDataDto.examLevels.push('B1')
+        }
+        if(this.state.B2Checked) {
+            scheduledExamsDataDto.examLevels.push('B2')
+        }
+        if(this.state.C1Checked) {
+            scheduledExamsDataDto.examLevels.push('C1')
         }
 
-        request.post('exams', examDto, (err, res) => {
+        console.log(JSON.stringify(scheduledExamsDataDto))
+
+        request.post('exams', scheduledExamsDataDto, (err, res) => {
 
             if(err) {
-                console.log("The Exam could not be scheduled \n More details below ")
-                //console.log(err)
+                console.log(err)
             } else {
-                console.log("The Exam was successfully schedule !!!")
+                console.log(res)
             }
         })
     }
+
 
 
     renderStaffViews = (views) => {
@@ -297,13 +382,23 @@ class Admin extends React.Component {
                 const scheduleExamProps = {
                     examDate: this.state.examDate,
                     examLevel: this.state.examLevel,
+                    A1Checked: this.state.A1Checked,
+                    A2Checked: this.state.A2Checked,
+                    B1Checked: this.state.B1Checked,
+                    B2Checked: this.state.B2Checked,
+                    C1Checked: this.state.C1Checked,
                 }
                 return(
                     <ScheduleExam
                         scheduleExamProps={scheduleExamProps}
                         handleScheduleExamTextFieldsChanges={this.handleScheduleExamTextFieldsChanges}
+                        handleScheduleExamCheckBoxChanges={this.handleScheduleExamCheckBoxChanges}
                         handleScheduleExamScheduleButtonClick={this.handleScheduleExamScheduleButtonClick}
                     />
+                );
+            case "password-change":
+                return(
+                    <PasswordChange/>
                 );
             default:
                 break;
@@ -311,10 +406,6 @@ class Admin extends React.Component {
     }
 
     render() {
-        console.log(`the value of the <<option>> param is => ${this.props.match.params.option}`)
-        console.log(`the value of the <<menu>> param is => ${this.props.match.params.menu}`)
-        console.log("The value of the sidebar state is:" + JSON.stringify(this.state));
-
         const sidebarProps = {
             openAccountsButton: this.state.openAccountsButton,
             openMarksExamsButton:this.state.openMarksExamsButton,
@@ -334,18 +425,30 @@ class Admin extends React.Component {
         }
 
 
+        const {classes} = this.props;
+
         return(
-            <div>
-                <HeaderAndSidebar pageBody={this.renderStaffViews(this.props.match.params.option)}
-                                  sidebarProps={sidebarProps}
-                                  handleAccountsButtonClick={this.handleAccountsButtonClick}
-                                  accountsCollapseHandlers={accountsCollapseHandlers}
-                                  handleMarksExamsButtonClick={this.handleMarksExamsButtonClick}
-                                  marksExamsCollapseHandlers={marksExamsCollapseHandlers}
+
+            <div className={classes.root}>
+                <CssBaseline />
+                <Header className={classes.appBar} />
+
+                <Sidebar classNameDrawer={classes.drawer} 
+                  classNameDrawerPaper={classes.drawer}
+                  classNameDrawerContainer={classes.drawer}
+                  sidebarProps={sidebarProps}
+                  handleAccountsButtonClick={this.handleAccountsButtonClick}
+                  accountsCollapseHandlers={accountsCollapseHandlers}
+                  handleMarksExamsButtonClick={this.handleMarksExamsButtonClick}
+                  marksExamsCollapseHandlers={marksExamsCollapseHandlers}
                 />
+                <Paper className={classes.paperMain}>
+                    <Toolbar/>
+                    {this.renderStaffViews(this.props.match.params.option)}
+                </Paper>
             </div>
         ); 
     }
 }
 
-export default Admin;
+export default withStyles(styles)(Staff);

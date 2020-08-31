@@ -5,10 +5,7 @@ import { Radio, RadioGroup, FormControl, FormControlLabel, FormLabel} from '@mat
 import {FormGroup,Checkbox} from '@material-ui/core';
 import {Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
 import {Card, CardActions, CardContent,}  from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import { green } from '@material-ui/core/colors';
-import clsx from 'clsx';
-import Fab from '@material-ui/core/Fab';
+
 
 const styles = theme => ({
     card: {
@@ -49,31 +46,6 @@ const styles = theme => ({
       margin: 'auto',
       marginBottom: theme.spacing(2),
     },
-    wrapper: {
-        margin: 'auto',
-        position: 'relative',
-      },
-      buttonSuccess: {
-        backgroundColor: green[500],
-        '&:hover': {
-          backgroundColor: green[700],
-        },
-      },
-      fabProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: -6,
-        left: -6,
-        zIndex: 1,
-      },
-      buttonProgress: {
-        color: green[500],
-        position: 'absolute',
-        top: '50%',
-        left: '50%',
-        marginTop: -12,
-        marginLeft: -12,
-      },
   })
 
 
@@ -81,13 +53,6 @@ const styles = theme => ({
 
 class CreateAccount extends React.Component {
 
-    constructor(props) {
-        super(props)
-        this.state ={
-          loading: false,
-          success: false,  
-        }
-    }
 
     handleRadioClick = (event) => {
         this.props.handleRadioClick(event.target.value)
@@ -105,9 +70,11 @@ class CreateAccount extends React.Component {
 
     }
 
-    handleCreateAccountButtonClick = () => {
+    handleCreateAccountButtonClick = (event) => {
+        
         this.props.handleCreateAccountButtonClick()
-        //this.set
+        event.preventDefault()
+        
     }
 
 
@@ -116,24 +83,26 @@ class CreateAccount extends React.Component {
         const {classes} = this.props
         const levels = ["A1", "A2", "B1", "B2", "C1"] 
         const staffRoles = ["ADMIN", "MANAGER", "TEACHER"]
-        const buttonClassname = clsx({ [classes.buttonSuccess]: this.props.createAccountProps.accountCreationSuccess, });
 
         // This are the role names as stored in the datase
         const roles = ["ROLE_STAFF_ADMIN", "ROLE_STAFF_MANAGER", "ROLE_STAFF_TEACHER", "ROLE_STDUENT"]
 
-        console.log("Create Account component: the createAccountProps object is: " + JSON.stringify(this.props.createAccountProps))
+        //console.log("Create Account component: the createAccountProps object is: " + JSON.stringify(this.props.createAccountProps))
         
         return(
             <div>
 
                 <Card className={classes.card} raised>
-                    <CardContent>
+                    
                     <Typography className={classes.title} 
                             variant= 'h3'
                             color= 'inherit'
                     >
                         Create New Account
                     </Typography>
+
+                    <form onSubmit={this.handleCreateAccountButtonClick}>
+                    <CardContent>
                     <FormControl component="fieldset">
                             <RadioGroup row value={this.props.createAccountProps.accountType} onChange={this.handleRadioClick} className={classes.radioGroup}>
                                 
@@ -182,6 +151,7 @@ class CreateAccount extends React.Component {
                     }
                     <TextField
                         className={classes.textField}
+                        margin='normal'
                         id="firstname"
                         type="text"
                         label="First name"
@@ -193,6 +163,7 @@ class CreateAccount extends React.Component {
                     /><br/> <br/>
                     <TextField
                         className={classes.textField}
+                        margin='normal'
                         id="lastname"
                         type="text"
                         label="Last name"
@@ -204,6 +175,7 @@ class CreateAccount extends React.Component {
                     /><br/> <br/>
                     <TextField
                         className={classes.textField}
+                        margin='normal'
                         id="dateOfBirth"
                         type="date"
                         label="Date of birth"
@@ -211,9 +183,13 @@ class CreateAccount extends React.Component {
                         required
                         value={this.props.createAccountProps.dateOfBirth}
                         onChange={this.handleTextFieldChanges}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
                     /><br/> <br/>
                     <TextField
                         className={classes.textField}
+                        margin='normal'
                         id="phoneNumber"
                         type="tel"
                         label="Phone number"
@@ -227,6 +203,7 @@ class CreateAccount extends React.Component {
                             <div>
                                 <TextField
                                     className={classes.textField}
+                                    margin='normal'
                                     id="officePhoneNumber"
                                     type="tel"
                                     label="Office phone number"
@@ -240,6 +217,7 @@ class CreateAccount extends React.Component {
 
                     <TextField
                         className={classes.textField}
+                        margin='normal'
                         id="email"
                         type="email"
                         label="Email"
@@ -253,6 +231,7 @@ class CreateAccount extends React.Component {
                             <div>
                                 <TextField
                                     className={classes.textField}
+                                    margin='normal'
                                     id="currentLevel"
                                     type="text"
                                     label="Current level"
@@ -274,6 +253,7 @@ class CreateAccount extends React.Component {
                             <div>
                                 <TextField
                                     className={classes.textField}
+                                    margin='normal'
                                     id="officeNumber"
                                     type="text"
                                     label="Office number"
@@ -287,18 +267,17 @@ class CreateAccount extends React.Component {
                     </CardContent>
 
                     <CardActions>
-                    <div className={classes.wrapper}>
+                    
                     <Button 
-                    color="primary" variant="contained" 
+                    type="submit"
+                    color="primary" 
+                    variant="contained" 
                     className={classes.createAccount}  
-                    onClick={this.props.handleCreateAccountButtonClick}
-                        //className={buttonClassname}
-                    disabled={this.props.createAccountPropsaccountCreationInProgress}
                     >
                         Create Account
                     </Button>
-                    {this.props.createAccountPropsaccountCreationInProgress && <CircularProgress size={50} className={classes.buttonProgress} />}
-                    </div>
+                   
+                   
                         <Dialog
                             open={this.props.createAccountProps.openConfirmationDialog}
                             onClose={this.props.handleCancelOrCloseDialog}
@@ -316,9 +295,12 @@ class CreateAccount extends React.Component {
                                 <Button  onClick={this.props.handleConfirmButtonClick} color="primary" autoFocus="autofocus" >Confirm</Button>
                             </DialogActions>
                         </Dialog>
-                    </CardActions>
-                    <br/><br/>   
+                        </CardActions>
+                    </form>
                 </Card>
+                    
+                    <br/><br/>   
+                
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {Typography} from '@material-ui/core'
 
 import StaffTable from '../userTables/StaffTable'
@@ -15,8 +15,7 @@ const useStyles= makeStyles((theme) => ({
     },
     title:{
         textAlign: 'center',
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(3),
+        margin:theme.spacing(4, 0, 3),
         color: theme.palette.primary.main
     },
 }));

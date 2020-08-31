@@ -112,7 +112,7 @@ function MarkAssignmentTable(props) {
         }
 
 
-        console.log(markDto)
+        //console.log(markDto)
 
         request.post(`marks`, markDto, (err, res) => {
 
@@ -140,7 +140,7 @@ function MarkAssignmentTable(props) {
         fetchLatestDate()
     }, [])
 
-    console.log(`the value of score: ${score} and the value of selectedSubject: ${selectedSubject}`)
+    //console.log(`the value of score: ${score} and the value of selectedSubject: ${selectedSubject}`)
     return(
         <div>
         <Toolbar className={classes.toolbar}>
@@ -151,8 +151,8 @@ function MarkAssignmentTable(props) {
 
             <TableHead>
                 <TableRow>
-                    <TableCell><Typography variant="4">Subjects</Typography></TableCell>
-                    <TableCell align="center"><Typography variant="4">Socred Mark</Typography></TableCell>
+                    <TableCell><Typography variant="h6">Subjects</Typography></TableCell>
+                    <TableCell align="center"><Typography variant="h6">Socred Mark</Typography></TableCell>
                     <TableCell align="center"></TableCell>
                 </TableRow>
             </TableHead>
@@ -200,7 +200,7 @@ function MarkAssignmentTable(props) {
                             startIcon={<Save/>}
                             onClick={handleOnSaveButtonClick}
                         >
-                            save
+                            assess
                         </Button>
                     </TableCell>
                     
@@ -309,8 +309,8 @@ function MarksSummaryTable(props) {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell><Typography variant="4">Subjects</Typography></TableCell>
-                            <TableCell align="center"><Typography variant="4">Scores</Typography></TableCell>
+                            <TableCell><Typography variant="h6">Subjects</Typography></TableCell>
+                            <TableCell align="center"><Typography variant="h6">Scores</Typography></TableCell>
                             
                         </TableRow>
                     </TableHead>

@@ -1,26 +1,26 @@
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import MaterialTable, { MTableToolbar } from 'material-table'
-import { Typography, TextField, InputLabel } from '@material-ui/core';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, } from '@material-ui/core';
-import {Paper, Toolbar, Container, Grid} from '@material-ui/core';
+import { Typography, TextField, } from '@material-ui/core';
+import {Table, TableBody, TableCell, TableHead, TableRow, } from '@material-ui/core';
+import {Paper, Toolbar, Container,} from '@material-ui/core';
 
-import Header from './../header/Header'
+import Header           from './../header/Header'
+import PasswordChange   from '../credentials/PasswordChange'
 
 const request = require ('../../resources/request');
 
 const styles = theme => ({
-    root: {
-        marginTop: theme.spacing(5),
+    views: {
+        marginTop: theme.spacing(8),
     },
+    passwordChange: {
+        marginTop: theme.spacing(4),
+    }
 })
 
 const useStyles = makeStyles((theme) => ({
     fieldset:{
-        //backgroundColor: theme.palette.info.light,
-        //marginLeft: theme.spacing(60),
-        marginTop: theme.spacing(8),
-        marginBottom: theme.spacing(8),
+        margin: theme.spacing(8, 0, 8, 0),
         paddingRight: theme.spacing(5),
         borderStyle: "groove",
         borderColor: theme.palette.info.light,
@@ -30,17 +30,12 @@ const useStyles = makeStyles((theme) => ({
     legend:{
         backgroundColor: "#FFFAFA",
         color: theme.palette.secondary.main,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        padding: theme.spacing(1, 1, 1, 1),
     },
     textFieldSelect: {
-        marginBottom: theme.spacing(3),
-        marginRight: theme.spacing(40),
+        margin: theme.spacing(0,40,3,0),
         backgroundColor: "#FFFFFF",
         maxWidth: 150,
-        minWidth: 150,
         flexGrow: 1,
     },
     labelDetail: {
@@ -48,19 +43,28 @@ const useStyles = makeStyles((theme) => ({
     },
     toolbar: {
         paddingTop: theme.spacing(2.5),
-        maxWidth: 800,
+        //maxWidth: 800,
     },
     span: {
         color: theme.palette.primary.main,
     },
     table: {
         width: 1165,
-        marginLeft: theme.spacing(3),
-        marginRight: theme.spacing(3)
+        margin: theme.spacing(0, 3, 0, 3),
     },
     paper: {
         width: 1200,
+        marginBottom: theme.spacing(2),
     },
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    passwordChange: {
+        marginTop: theme.spacing(4),
+    },
+    
 }))
 
 
@@ -82,8 +86,6 @@ function EnhancedStudentDetails(props) {
     
     return(
         <div>
-            
-            <Grid item>
                 <fieldset className={classes.fieldset}>
                     <legend className={classes.legend}>Student Details</legend>
                     <EnhancedDetailsInput label={'First name:             '} value={studentDetails.firstname}/>
@@ -93,8 +95,6 @@ function EnhancedStudentDetails(props) {
                     <EnhancedDetailsInput label={'Email:                       '} value={studentDetails.email}/>
                     <EnhancedDetailsInput label={'Current level:          '} value={studentDetails.currentLevel}/>
                 </fieldset>
-            </Grid>
-              
         </div>
     )
 }
@@ -130,7 +130,7 @@ function EnhancedToolbar(props) {
                         ))
                     }
                 </TextField>
-                <Typography className={classes.titleToolbar} color='primary' variant='h5'>Marks Report &nbsp; {props.level}</Typography>
+                <Typography  color='primary' variant='h5'>Marks Report &nbsp; {props.level}</Typography>
             </Toolbar>
         </div>
     )
@@ -143,7 +143,6 @@ function MarksSummaryReport(props) {
     console.log("In Enhanced marks summary report, the value of props.examMarksis => " + JSON.stringify(examMarks))
     return(
         <div>
-            <Grid item>
             <Paper className={classes.paper} elevation={3}>
             <EnhancedToolbar level={props.level} dates={props.dates}
                 handleOnDateSelect={props.handleOnDateSelect}
@@ -170,9 +169,28 @@ function MarksSummaryReport(props) {
                 </TableBody>
             </Table>
             </Paper>
-            </Grid>
         </div>
     )
+}
+
+function StudentReportCard(props) {
+    const classes = useStyles()
+    
+    return(
+        <Container component='main'>
+            <div className={classes.container}>
+                <EnhancedStudentDetails studentDetails={props.studentReportCardProps.studentDetails} />
+                <MarksSummaryReport
+                    level={props.studentReportCardProps.level}
+                    studentDetails={props.studentReportCardProps.studentDetails}
+                    examMarks={props.studentReportCardProps.examMarks}
+                    dates={props.studentReportCardProps.dates}
+                    choosenDate={props.studentReportCardProps.choosenDate}
+                    handleOnDateSelect={props.studentReportCardProps.handleOnDateSelect}
+                />
+            </div>
+        </Container>
+    );
 }
 
 
@@ -262,23 +280,44 @@ class Student extends React.Component {
         
     }
 
+    renderStudentViews = (views) => {
+        
+        switch(views) {
+            case "report-card":
+                const studentReportCardProps = {
+                    studentDetails:this.state.studentDetails,
+                    level: this.state.marksReportLevel,
+                    examMarks:this.state.marks,
+                    dates:this.state.examsDates,
+                    choosenDate:this.state.choosenDate,
+                    handleOnDateSelect:this.handleOnDateSelect,
+                }
+
+                return(
+                    <StudentReportCard studentReportCardProps={studentReportCardProps}/>
+                );
+            case "password-change":
+                return(
+                    <div style={{marginTop: '110px'}}>
+                        <PasswordChange/>  
+                    </div>
+                );
+            default:
+                break;
+        }
+    }
+
+
     render() {
         const {classes} = this.props
-        
+
         return(
-            <div className={classes.root}>
-            <Header/>
-            <Grid container justify='center' >
-                <EnhancedStudentDetails studentDetails={this.state.studentDetails} />
-                <MarksSummaryReport
-                    level={this.state.marksReportLevel}
-                    studentDetails={this.state.studentDetails}
-                    examMarks={this.state.marks}
-                    dates={this.state.examsDates}
-                    choosenDate={this.state.choosenDate}
-                    handleOnDateSelect={this.handleOnDateSelect}
-                />
-            </Grid>
+            <div>
+                <Header/>
+                <div className={classes.views}>
+                    {this.renderStudentViews(this.props.match.params.option)}
+                </div>
+                
             </div>
         )
     }
