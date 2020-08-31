@@ -14,7 +14,8 @@ public interface CredentialService {
      * @param credentialDto
      * @return
      */
-    public Credential create(CredentialDto credentialDto);
+
+    Credential create(CredentialDto credentialDto);
 
 
     // Read
@@ -26,10 +27,11 @@ public interface CredentialService {
      * @param username
      * @return
      */
-    public Credential getByUsername(String username);
+    Credential getByUsername(String username);
 
 
-    public boolean checkExistsById(Long id);
+    boolean checkExistsById(Long id);
+    boolean checkExistsByUsernameAndPassword(String username, String password);
 
 
     // Update
@@ -42,11 +44,11 @@ public interface CredentialService {
      * @param newPassword
      * @return
      */
-    public Credential updatePassword(String username, String newPassword);
+    Credential updatePassword(String username, String newPassword);
 
     // Delete
 
     // Non CRUD functions
 
-    public String generateUsernames(String firstname, String lastname);
+    String generateUsernames(String firstname, String lastname);
 }

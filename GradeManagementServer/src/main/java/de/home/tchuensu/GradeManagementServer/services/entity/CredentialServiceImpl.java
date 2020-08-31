@@ -89,6 +89,16 @@ public class CredentialServiceImpl  implements CredentialService {
        return credentialRepository.existsById(id);
     }
 
+    @Override
+    public boolean checkExistsByUsernameAndPassword(String username, String password) {
+        Credential credential = credentialRepository.findByUsername(username);
+        if(credential != null ){
+            return bCryptPasswordEncoder.matches(password, credential.getPasswordHash());
+        } else {
+            return false;
+        }
+    }
+
 
     @Override
     public Credential updatePassword(String username, String newPassword) {
@@ -100,7 +110,7 @@ public class CredentialServiceImpl  implements CredentialService {
             credential = credentialRepository.save(credential);
             return credential;
         }
-        throw new CredentialNotFoundException("The Credential with the username : " + username + "that your trying " +
+        throw new CredentialNotFoundException("The Credential with the username : " + username + " that your trying " +
                 " to update does not exist !!!");
     }
 

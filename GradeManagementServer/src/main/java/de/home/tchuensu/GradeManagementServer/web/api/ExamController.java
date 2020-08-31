@@ -1,6 +1,7 @@
 package de.home.tchuensu.GradeManagementServer.web.api;
 
 import de.home.tchuensu.GradeManagementServer.dao.dto.model.ExamDto;
+import de.home.tchuensu.GradeManagementServer.dao.dto.model.ScheduledExamsDataDto;
 import de.home.tchuensu.GradeManagementServer.services.controller.ExamControllerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Controller
 @CrossOrigin(origins = "*")
@@ -18,9 +20,9 @@ public class ExamController {
     ExamControllerServiceImpl examControllerService;
 
     @PostMapping
-    public ResponseEntity<ExamDto> create(@RequestHeader("Authorization") String authenticationToken, @RequestBody ExamDto examDto) {
+    public ResponseEntity<List<ExamDto>> create(@RequestHeader("Authorization") String authenticationToken, @RequestBody ScheduledExamsDataDto scheduledExamsDataDto) {
 
-        return  examControllerService.processCreateExam(examDto);
+        return  examControllerService.processCreateExam(scheduledExamsDataDto);
     }
 
     @GetMapping("latest-date")
