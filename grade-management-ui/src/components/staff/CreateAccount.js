@@ -40,6 +40,15 @@ const styles = theme => ({
       margin: 'auto',
       marginBottom: theme.spacing(2),
     },
+    error: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: theme.spacing(3, 0, 2, 5)
+      },
+      errorMessage: {
+          marginLeft: theme.spacing(1.5)
+      },
   })
 
 

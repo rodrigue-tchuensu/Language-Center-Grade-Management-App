@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import {Error, LockOutlined} from '@material-ui/icons';
+import {TextField, Button, CssBaseline, Typography} from '@material-ui/core';
+import {Box, Grid, Paper, Avatar} from '@material-ui/core';
 
 //image source: https://images.app.goo.gl/GVfAtDhD2wsu6opD7
 import backgroundImage from './../../assets/foreign_language_books.jpg'
@@ -22,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundImage: `url(${backgroundImage})`,
     backgroundRepeat: 'no-repeat',
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
+    theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
@@ -34,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.primary.main,
   },
   form: {
     width: '100%',
@@ -43,12 +38,24 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  error: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: theme.spacing(3, 0, 2, 5)
+  },
+  errorMessage: {
+      marginLeft: theme.spacing(1.5),
+      textAlign: 'center',
+  },
 }));
 
 export default function Login(props) {
   const classes = useStyles();
   const [username, setUserName] = useState("")
   const [password, setPassword] = useState("")
+  const [error, setError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
 
   const redirect = () => {
@@ -75,9 +82,8 @@ export default function Login(props) {
 
     request.login(credential, (err, res) => {
       if(err) {
-        console.log(err)
+        setError(true)
       } else {
-        console.log(res)
         request.auth.authenticate(res.header.authorization.split(' ')[1])
         redirect()
       }
@@ -101,7 +107,7 @@ export default function Login(props) {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-            <LockOutlinedIcon />
+            <LockOutlined />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -132,6 +138,10 @@ export default function Login(props) {
               value={password}
              // autoComplete="current-password"
             />
+            {error && (<Box className={classes.error}>
+              <Error color='error'/>
+              <Typography className={classes.errorMessage} color='error'><> Login failed.<br/> Your password or username is incorrect</> </Typography>
+            </Box>)}
             
             <Button
               type="submit"
