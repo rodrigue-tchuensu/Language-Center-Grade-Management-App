@@ -92,6 +92,10 @@ class Staff extends React.Component {
             openConfirmationDialog: false,
             accountCreationInProgress: false,
             accountCreationSuccess: false,
+            caError:false,
+            caErrorMessage:"",
+            openSuccessDBox:false,
+
 
           //EdithAccount component props
 
@@ -139,6 +143,17 @@ class Staff extends React.Component {
             openConfirmationDialog: false,
             accountCreationInProgress: false,
             accountCreationSuccess: false,
+        })
+    }
+
+    clearScheduleExamFormOnScheduleSuccessful = () => {
+        this.setState({
+            examDate: "",
+            A1Checked: false,
+            A2Checked: false,
+            B1Checked: false,
+            B2Checked: false,
+            C1Checked: false,
         })
     }
 
@@ -214,9 +229,27 @@ class Staff extends React.Component {
         this.setState({openConfirmationDialog: false})
     }
 
+    handleCASuccessDBoxOnClose = () => {
+        this.setState({openSuccessDBox: false})
+    }
+
+    handleCASuccessDBoxOnButton1Click = () => {
+        this.setState({openSuccessDBox: false})
+    }
+
+    handleCASuccessDBoxOnButton2Click = () => {
+        this.setState({openSuccessDBox: false})
+        this.props.history.push('/staffs/accounts/view') 
+
+    }
+
+
     handleConfirmButtonClick = () => {
 
-        this.setState({openConfirmationDialog: false})
+        this.setState({openConfirmationDialog: false,
+            accountCreationInProgress: true
+        })
+        
         
         const rolesDto = []
         const userData = {
@@ -253,15 +286,18 @@ class Staff extends React.Component {
             request.post('staffs',staffAccountDataDto, (err, res) => {
                 
                 if(err) {
-                    //console.log("Error_Staff_Account_Creation: the api post request, reported an error! \n See error response below: ")
-                    //console.log(err)
-                    this.setState({accountCreationSuccess: false})
+                    this.setState({accountCreationSuccess: false, caError: true,
+                        caErrorMessage: err.response.body.message, })
+                    this.setState({accountCreationInProgress:false})
                 }
                 else {
-                    //console.log("Success: the api post request was successful! \n See success response below")
-                    //console.log(res)
-                    this.setState({accountCreationSuccess: true})
+                    this.setState({accountCreationSuccess: true, openSuccessDBox: true })
                     this.clearCreateAccountFormOnAccountCreationSuccessful()
+
+                    if(this.state.caError) {
+                        this.setState({caError: false, caErrorMessage: "", })
+                    }
+                    this.setState({accountCreationInProgress:false})
                 }
             });
 
@@ -271,23 +307,27 @@ class Staff extends React.Component {
             
             const studentDto = userData;
             const studentAccountDataDto = {studentDto, rolesDto}
-            //console.log("representation of the studentAccountDataDto => \n " + JSON.stringify(studentAccountDataDto) )
 
             request.post('students', studentAccountDataDto, (err, res) => {
 
                 if(err) {
-                    console.log("Error_Student_Account_Creation: the api post request, reported an error! \n See error response below: ")
-                    //console.log(err)
-                    this.setState({accountCreationSuccess: false})
+                    
+                    this.setState({accountCreationSuccess: false, caError: true,
+                        caErrorMessage: err.response.body.message, })
+                    this.setState({accountCreationInProgress:false})
                 }
                 else {
-                    console.log("Success: the api post request was successful! \n See success response below")
-                    console.log(res)
-                    this.setState({accountCreationSuccess: true})
+                    this.setState({accountCreationSuccess: true, openSuccessDBox:true})
                     this.clearCreateAccountFormOnAccountCreationSuccessful()
+
+                    if(this.state.caError) {
+                        this.setState({caError: false, caErrorMessage: "", })
+                    }
+                    this.setState({accountCreationInProgress:false})
                 }
             });
         }
+        
     }
 
     //Eventhandler for scheduleExam component 
@@ -350,9 +390,10 @@ class Staff extends React.Component {
                 console.log(res)
                 this.setState({openScheduleExamDBox: true})
                 if(this.state.seError) {
-                    this.setState({seError:true,
-                        seErrorMessage:err.response.body.message })
+                    this.setState({seError:false,
+                        seErrorMessage:"" })
                 }
+                this.clearScheduleExamFormOnScheduleSuccessful()
             }
         })
     }
@@ -383,6 +424,9 @@ class Staff extends React.Component {
                     openConfirmationDialog: this.state.openConfirmationDialog,
                     accountCreationInProgress: this.state.accountCreationInProgress,
                     accountCreationSuccess: this.state.accountCreationSuccess,
+                    error: this.state.caError,
+                    errorMessage: this.state.caErrorMessage,
+                    openSuccessDBox: this.state.openSuccessDBox,
                 }
                 return <CreateAccount 
                             createAccountProps={createAccountProps}
@@ -392,6 +436,9 @@ class Staff extends React.Component {
                             handleCreateAccountButtonClick={this.handleCreateAccountButtonClick}
                             handleCancelOrCloseDialog={this.handleCancelOrCloseDialog}
                             handleConfirmButtonClick={this.handleConfirmButtonClick }
+                            handleCASuccessDBoxOnClose={this.handleCASuccessDBoxOnClose}
+                            handleCASuccessDBoxOnButton1Click={this.handleCASuccessDBoxOnButton1Click}
+                            handleCASuccessDBoxOnButton2Click={this.handleCASuccessDBoxOnButton2Click}
                        />
             case "edith":
                 //return edithAccount view component

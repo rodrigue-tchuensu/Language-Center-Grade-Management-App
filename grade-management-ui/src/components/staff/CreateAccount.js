@@ -3,9 +3,11 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, TextField, Button,} from '@material-ui/core';
 import { Radio, RadioGroup, FormControl, FormControlLabel, FormLabel} from '@material-ui/core';
 import {FormGroup,Checkbox} from '@material-ui/core';
-import {Card, CardActions, CardContent,}  from '@material-ui/core';
+import {Card, CardActions, CardContent, Box,}  from '@material-ui/core';
+import {Error} from '@material-ui/icons';
 
 import DialogBox from '../feedback/DialogBox'
+import CircularProgressWithLabel from '../feedback/CircularProgressWithLabel'
 
 const styles = theme => ({
     card: {
@@ -252,6 +254,12 @@ class CreateAccount extends React.Component {
                                     </div>
                                 )
                             }
+
+                            {this.props.createAccountProps.error && (<Box className={classes.error}>
+                                <Error color='error'/>
+                                <Typography className={classes.errorMessage} color='error'>{this.props.createAccountProps.errorMessage}</Typography>
+                            </Box>)}
+
                         </CardContent>
 
                         <CardActions>
@@ -277,6 +285,19 @@ class CreateAccount extends React.Component {
                     onButton1Click={this.props.handleConfirmButtonClick}
                     onButton2Click={this.props.handleCancelOrCloseDialog}
                 />
+
+                <DialogBox 
+                    btn2IsVisible={true}
+                    open={this.props.createAccountProps.openSuccessDBox}
+                    title="Account Creation Successful"
+                    contentText={<>The account has successfully been created.<br/> Do you want to create another account ?</>}
+                    btn1Name="YES" btn2Name="NO"
+                    onclose={this.props.handleCASuccessDBoxOnClose} 
+                    onButton1Click={this.props.handleCASuccessDBoxOnButton1Click}
+                    onButton2Click={this.props.handleCASuccessDBoxOnButton2Click}
+                />
+                <CircularProgressWithLabel size={200} label="creation in progress" open={this.props.createAccountProps.accountCreationInProgress}/>
+
                       
             </div>
         );
