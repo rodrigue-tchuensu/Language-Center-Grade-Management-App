@@ -103,6 +103,9 @@ class Staff extends React.Component {
           B1Checked: false,
           B2Checked: false,
           C1Checked: false,
+          seError: false,
+          seErrorMessage:"",
+          openScheduleExamDBox: false,
         }
     }
 
@@ -149,35 +152,33 @@ class Staff extends React.Component {
     }
 
     handleClickView = () => {
-        this.props.history.push('/staffs/accounts/view')
-        //this.setState({staffView: "accounts_view"})
-        
+        this.setState({staffView: "accounts_view"})
+        this.props.history.push('/staffs/accounts/view')  
     }
 
     handleClickCreate = () => {
+        this.setState({staffView: "accounts_create"})
         this.props.history.push('/staffs/accounts/create')
-        //this.setState({staffView: "accounts_create"})
     }
 
     handleClickEdit = () => {
+        this.setState({staffView: "accounts_edit"})
         this.props.history.push('/staffs/accounts/edit')
-        //this.setState({staffView: "accounts_edit"})
     }
 
     handleClickDelete = () => {
+        this.setState({staffView: "accounts_delete"})
         this.props.history.push('/staffs/accounts/delete')
-        //this.setState({staffView: "accounts_delete"})
     }
 
     handleClickManageMarks = () => {
-        this.props.history.push('/staffs/marks-exams/manage-marks')
-         
         this.setState({staffView: "manage_marks"})
+        this.props.history.push('/staffs/marks-exams/manage-marks')
     }
 
     handleClickScheduleExams = () => {
-        this.props.history.push('/staffs/marks-exams/schedule-exams')
         this.setState({staffView: "schedule_exams"})
+        this.props.history.push('/staffs/marks-exams/schedule-exams')
     }
 
 
@@ -292,10 +293,27 @@ class Staff extends React.Component {
     //Eventhandler for scheduleExam component 
     handleScheduleExamTextFieldsChanges = (stateProp, value) => {
         this.setState({[stateProp]: value})
+        if(this.state.seError) {
+            this.setState({seError:false,
+                seErrorMessage:"" })
+        }
     }
 
     handleScheduleExamCheckBoxChanges = (stateProp, value) => {
         this.setState({[stateProp]: value})
+        if(this.state.seError) {
+            this.setState({seError:false,
+                seErrorMessage:"" })
+        }
+    }
+
+    handleSEOnDBoxClose = () => {
+        this.setState({openScheduleExamDBox: false})
+    }
+
+    handleSEDBoxButtonClick = () => {
+        this.setState({openScheduleExamDBox: false})
+        this.props.history.push('/staffs/accounts/view')
     }
 
     handleScheduleExamScheduleButtonClick = () => {
@@ -326,8 +344,15 @@ class Staff extends React.Component {
 
             if(err) {
                 console.log(err)
+                this.setState({seError:true,
+                    seErrorMessage:err.response.body.message })
             } else {
                 console.log(res)
+                this.setState({openScheduleExamDBox: true})
+                if(this.state.seError) {
+                    this.setState({seError:true,
+                        seErrorMessage:err.response.body.message })
+                }
             }
         })
     }
@@ -387,6 +412,9 @@ class Staff extends React.Component {
                     B1Checked: this.state.B1Checked,
                     B2Checked: this.state.B2Checked,
                     C1Checked: this.state.C1Checked,
+                    error:     this.state.seError,
+                    errorMessage: this.state.seErrorMessage,
+                    openScheduleExamDBox:this.state.openScheduleExamDBox,
                 }
                 return(
                     <ScheduleExam
@@ -394,11 +422,13 @@ class Staff extends React.Component {
                         handleScheduleExamTextFieldsChanges={this.handleScheduleExamTextFieldsChanges}
                         handleScheduleExamCheckBoxChanges={this.handleScheduleExamCheckBoxChanges}
                         handleScheduleExamScheduleButtonClick={this.handleScheduleExamScheduleButtonClick}
+                        handleSEOnDBoxClose={this.handleSEOnDBoxClose}
+                        handleSEDBoxButtonClick={this.handleSEDBoxButtonClick}
                     />
                 );
             case "password-change":
                 return(
-                    <PasswordChange/>
+                    <PasswordChange redirectDestination='/staffs/accounts/view'/>
                 );
             default:
                 break;

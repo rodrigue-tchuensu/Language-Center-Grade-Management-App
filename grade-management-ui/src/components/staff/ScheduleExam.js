@@ -1,30 +1,30 @@
 import React from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import {Typography, TextField, Button,} from '@material-ui/core';
-import {Card, CardActions, CardContent, Container}  from '@material-ui/core';
+import {Card, CardActions, CardContent, Container, Box}  from '@material-ui/core';
 import {FormControl, FormGroup, FormControlLabel, Checkbox}  from '@material-ui/core';
-
+import {Error} from '@material-ui/icons';
+import DialogBox from '../feedback/DialogBox'
 
   const useStyles = makeStyles(theme => ({
     card: {
-        marginTop: theme.spacing(8),
-        marginBottom: theme.spacing(3),
-        textAlign: 'center',    
+        margin: theme.spacing(8, 0, 3, 0),
+        textAlign: 'center', 
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',   
     },
     title: {
         textAlign: 'center',
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(5),
+        margin: theme.spacing(2, 0, 4, 0),
         color: theme.palette.primary.main
     },
     textField: {
-        marginLeft: theme.spacing(5),
-        marginRight: theme.spacing(3),
-        marginBottom: theme.spacing(5),
+        marginBottom: theme.spacing(3),
         width: 400
     },
     scheduleBotton: {
-        margin: 'auto',
+        //margin: 'auto',
         marginBottom: theme.spacing(5),
     },
     checkBox:{
@@ -36,8 +36,14 @@ import {FormControl, FormGroup, FormControlLabel, Checkbox}  from '@material-ui/
         alignItems: 'center',  
     },
     formGroupLabel: {
-        margin: theme.spacing(0, 2, 0, 14),
-    }
+        marginRight: theme.spacing(2),
+    },
+    error: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: theme.spacing(3, 0, 2, 5)
+    },
 }));
 
 
@@ -67,7 +73,6 @@ export default function ScheduleExam(props) {
                     className={classes.title}
                     variant= 'h3'
                     color= 'inherit'
-                    //display= 'inline'
                     >
                         Schedule Exam Date 
                     </Typography><br/>
@@ -120,7 +125,10 @@ export default function ScheduleExam(props) {
                             </FormControl>
                         </div>
                     </Container>
-                    
+                    {props.scheduleExamProps.error && (<Box className={classes.error}>
+                        <Error color='error'/>
+                        <Typography className={classes.errorMessage} color='error'>{props.scheduleExamProps.errorMessage}</Typography>
+                    </Box>)}
 
                 </CardContent>
                 <CardActions>
@@ -132,6 +140,14 @@ export default function ScheduleExam(props) {
                     </Button>
                 </CardActions>
             </Card>
+            <DialogBox
+                open={props.scheduleExamProps.openScheduleExamDBox}
+                title="Exam(s) Schedule Confirmation"
+                contentText="The Exam(s) have successfully been scheduled" 
+                btn1Name='OK'
+                onClose={props.handleSEOnDBoxClose}
+                onButton1Click={props.handleSEDBoxButtonClick}
+            />
         </div>
         
     )

@@ -299,7 +299,7 @@ class Student extends React.Component {
             case "password-change":
                 return(
                     <div style={{marginTop: '110px'}}>
-                        <PasswordChange/>  
+                        <PasswordChange redirectDestination={`/students/${request.auth.getAvailableUserDetails().username.replace('.', '-')}/report-card`}/>  
                     </div>
                 );
             default:
