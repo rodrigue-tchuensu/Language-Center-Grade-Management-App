@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     const classes = useStyles();
     return (
       <Box position="relative" display="inline-flex" className={classes.progess}>
-        <CircularProgress variant='indeterminate'  size={props.size} />
+        <CircularProgress  size={props.size} />
         <Box
           top={0}
           left={0}

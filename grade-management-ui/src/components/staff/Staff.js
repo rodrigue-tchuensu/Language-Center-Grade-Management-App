@@ -286,19 +286,18 @@ class Staff extends React.Component {
             request.post('staffs',staffAccountDataDto, (err, res) => {
                 
                 if(err) {
-                    this.setState({accountCreationSuccess: false, caError: true,
+                    this.setState({caError: true,
                         caErrorMessage: err.response.body.message, })
-                    this.setState({accountCreationInProgress:false})
                 }
                 else {
-                    this.setState({accountCreationSuccess: true, openSuccessDBox: true })
+                    this.setState({openSuccessDBox: true })
                     this.clearCreateAccountFormOnAccountCreationSuccessful()
 
                     if(this.state.caError) {
                         this.setState({caError: false, caErrorMessage: "", })
                     }
-                    this.setState({accountCreationInProgress:false})
                 }
+                this.setState({accountCreationInProgress:false})
             });
 
         } else {
@@ -312,19 +311,18 @@ class Staff extends React.Component {
 
                 if(err) {
                     
-                    this.setState({accountCreationSuccess: false, caError: true,
+                    this.setState({caError: true,
                         caErrorMessage: err.response.body.message, })
-                    this.setState({accountCreationInProgress:false})
                 }
                 else {
-                    this.setState({accountCreationSuccess: true, openSuccessDBox:true})
+                    this.setState({openSuccessDBox:true})
                     this.clearCreateAccountFormOnAccountCreationSuccessful()
 
                     if(this.state.caError) {
                         this.setState({caError: false, caErrorMessage: "", })
                     }
-                    this.setState({accountCreationInProgress:false})
                 }
+                this.setState({accountCreationInProgress:false})
             });
         }
         

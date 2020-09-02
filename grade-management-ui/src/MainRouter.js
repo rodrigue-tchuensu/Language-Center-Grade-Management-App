@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
-import {Route, Switch,  Redirect} from 'react-router-dom'
+import {BrowserRouter as Router, Route, Switch,  Redirect} from 'react-router-dom'
+import { LastLocationProvider, useLastLocation } from 'react-router-last-location';
 
 import Staff from './components/staff/Staff'
 import Student from './components/student/Student'
@@ -27,12 +28,14 @@ class MainRouter extends Component {
     render() {
       return (
         <div>   
-            <Switch>
-            <Route exact path="/" component={Login}/>
-            <Route exact path="/login" component={Login}/>
-            <PrivateRoute exact path="/staffs/:menu/:option" component={Staff}/>
-            <PrivateRoute exact path="/students/:user/:option" component={Student}/>
-            </Switch>
+            <Router>
+              <LastLocationProvider>
+                <Route exact path="/" component={Login}/>
+                <PrivateRoute exact  path="/login" component={Login}/>
+                <PrivateRoute  exact path="/staffs/:menu/:option" component={Staff}/>
+                <PrivateRoute  exact path="/students/:user/:option" component={Student}/>
+              </LastLocationProvider>
+            </Router>
     
         </div>)
     }

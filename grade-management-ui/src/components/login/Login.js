@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Error, LockOutlined} from '@material-ui/icons';
 import {TextField, Button, CssBaseline, Typography} from '@material-ui/core';
-import {Box, Grid, Paper, Avatar} from '@material-ui/core';
+import {Box, Grid, Paper, Avatar, CircularProgress} from '@material-ui/core';
 
 //image source: https://images.app.goo.gl/GVfAtDhD2wsu6opD7
 import backgroundImage from './../../assets/foreign_language_books.jpg'
@@ -48,6 +48,9 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: theme.spacing(1.5),
       textAlign: 'center',
   },
+  progress: {
+    marginRight: theme.spacing(3),
+  }
 }));
 
 export default function Login(props) {
@@ -55,7 +58,7 @@ export default function Login(props) {
   const [username, setUserName] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState(false)
-  const [errorMessage, setErrorMessage] = useState("")
+  const [loading, setLoading] = useState(false)
 
 
   const redirect = () => {
@@ -75,6 +78,7 @@ export default function Login(props) {
 
   const handleOnSignInButtonClick = (event) => {
 
+    setLoading(true)
     const credential = {
       username: username || undefined,
       password: password || undefined
@@ -83,8 +87,10 @@ export default function Login(props) {
     request.login(credential, (err, res) => {
       if(err) {
         setError(true)
+        setLoading(false)
       } else {
         request.auth.authenticate(res.header.authorization.split(' ')[1])
+        setLoading(false)
         redirect()
       }
     })
@@ -150,6 +156,7 @@ export default function Login(props) {
               color="primary"
               className={classes.submit}
             >
+              {loading && <CircularProgress color='inherit' size={30} />}
               Sign In
             </Button>
           </form>
