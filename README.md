@@ -1,3 +1,5 @@
+
+
 # Language-Center-Grade-Management-App
 
 
@@ -69,12 +71,30 @@ The current schema looks as follows:
 
 ## Technology
 
--  **Spring Boot** - Server side framework
+- **Spring Boot** - Server side framework
+
 - **MySQL** - SQL database
+
 - **JWT** - Authentication mechanism for REST APIs
+
 - **React**  - Front end JavaScript framework
+
 - **Material-UI** - React component library
+
 - **Docker** - Containerizing framework (will be used for local deployment)
+
+  
+
+<h2> <a href="https://llce.herokuapp.com/">Live Demo</a></h2>
+
+### Demo Credentials
+
+| Role    | Username         | Password |
+| ------- | ---------------- | -------- |
+| admin   | admin.staff      | admin    |
+| manager | manager.staff    | manager  |
+| teacher | teacher.staff    | teacher  |
+| student | student.students | student  |
 
 
 
