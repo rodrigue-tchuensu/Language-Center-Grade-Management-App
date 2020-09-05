@@ -236,6 +236,6 @@ This project is licensed under the terms of the MIT license.
 
 ## Credit 
 
- ![sign in background image](.\images\foreign_language_books_icon.ico) Image source:  https://images.app.goo.gl/GVfAtDhD2wsu6opD7
+ ![sign in background image](./images/foreign_language_books_icon.ico) Image source:  https://images.app.goo.gl/GVfAtDhD2wsu6opD7
 
-![app icon image](.\images\foreign_languages_icon.ico) image source:  image source: https://images.app.goo.gl/BypGX5hern4BgqNU7 
+![app icon image](./images/foreign_languages_icon.ico) image source:  image source: https://images.app.goo.gl/BypGX5hern4BgqNU7 
