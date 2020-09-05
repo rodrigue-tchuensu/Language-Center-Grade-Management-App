@@ -132,9 +132,7 @@ You can also use the Maven plugin to run the app as follows
 mvn spring-boot:run 
 ```
 
-You can follow any/all of the above commands, or simply use the run configuration provided by your favorite IDE and run/debug the app from there for development purposes. Once the server is setup you should be able to access the REST APIs  over the following base-path:
-
-[http://localhost:9090/api](http://localhost:9090/api/)
+You can follow any/all of the above commands, or simply use the run configuration provided by your favorite IDE and run/debug the app from there for development purposes. Once the server is setup you should be able to access the REST APIs  over the following base-path:  [http://localhost:9090/api](http://localhost:9090/api/)
 
 An important api endpoint is the login endpoint `http://localhost:9090/api/login`. Each every user must use this endpoint to authenticate themselves in other to obtain a JWT which will grant them the authorization to some of the other endpoints.
 
@@ -154,9 +152,7 @@ Running the following command
 npm start 
 ```
 
-at the base of project directory will launch building the application as well as starting it. Once the UI app is started, it can be accessed using the following URL:
-
-http://localhost:3000
+at the base of project directory will launch building the application as well as starting it. Once the UI app is started, it can be accessed using the following URL:  http://localhost:3000
 
 
 
@@ -235,3 +231,11 @@ Rodrigue Tchuensu Pouopse
 ## License
 
 This project is licensed under the terms of the MIT license.
+
+
+
+## Credit 
+
+ ![sign in background image](.\images\foreign_language_books_icon.ico) Image source:  https://images.app.goo.gl/GVfAtDhD2wsu6opD7
+
+![app icon image](.\images\foreign_languages_icon.ico) image source:  image source: https://images.app.goo.gl/BypGX5hern4BgqNU7 
