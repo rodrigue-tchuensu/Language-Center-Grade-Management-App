@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles} from '@material-ui/core/styles';
 import MaterialTable, { MTableToolbar } from 'material-table'
-import {Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import {Dialog,DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import {Button,} from '@material-ui/core';
 
 import DetailInputTag from './DetailInputTag';
@@ -34,7 +34,7 @@ export default function StudentTable(props) {
         const fetchData = () => {
             request.get('students/limitedInfos', (err, res) => {
                 if(err){
-                    console.log("Error: fetching student data using the api failed")
+                    
                 }
                 else {
                     setStudentsLimitedData(res.body)
@@ -69,19 +69,15 @@ export default function StudentTable(props) {
                             icon: 'emoji_people',
                             tooltip: 'More details ...',
                             onClick: (event, rowData) => {
-                                console.log("the value of the StudentNumber is: " + rowData.studentNumber)
+                                
                                 request.get('students/' + rowData.studentNumber, (err, res) => {
 
                                     if(err) {
-                                        console.log("Erreur: Could not load the specified staff details")
+                                       
                                     }
                                     else {
-                                        console.log("Succes: The staff detail data was successfully loaded\n You can see the response below")
-                                        console.log(res)
-                                        //this.setState({ detailDatat: res.body, showDetails: true})
                                         setStudentsDetailedData(res.body)
                                         setShowDetails(true)
-                                        //this.setState({showDetails: true})
                                     }
                                 })
                             }

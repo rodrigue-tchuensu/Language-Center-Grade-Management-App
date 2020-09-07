@@ -15,9 +15,6 @@ const styles = theme => ({
       textAlign: 'center',
       padding: theme.spacing(5, 0, 2, 0),
     },
-    error: {
-      verticalAlign: 'middle'
-    },
     title: {
       textAlign: 'center',
       margin: theme.spacing(2, 0, 5, 0),

@@ -116,7 +116,6 @@ class Staff extends React.Component {
 
     static getDerivegetDerivedStateFromProps(props, state) {
 
-        console.log("getDerivegetDerivedStateFromProps fxn fired!")
         if(props.match.params.option !== state.staffView) {
             return {
                 staffView: props.match.params.option
@@ -376,16 +375,16 @@ class Staff extends React.Component {
             scheduledExamsDataDto.examLevels.push('C1')
         }
 
-        console.log(JSON.stringify(scheduledExamsDataDto))
+        
 
         request.post('exams', scheduledExamsDataDto, (err, res) => {
 
             if(err) {
-                console.log(err)
+               
                 this.setState({seError:true,
                     seErrorMessage:err.response.body.message })
             } else {
-                console.log(res)
+                
                 this.setState({openScheduleExamDBox: true})
                 if(this.state.seError) {
                     this.setState({seError:false,

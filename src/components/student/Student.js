@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import { Typography, TextField, } from '@material-ui/core';
+import { Typography, TextField, TableContainer, } from '@material-ui/core';
 import {Table, TableBody, TableCell, TableHead, TableRow, } from '@material-ui/core';
 import {Paper, Toolbar, Container,} from '@material-ui/core';
 
@@ -10,8 +10,9 @@ import PasswordChange   from '../credentials/PasswordChange'
 const request = require ('../../resources/request');
 
 const styles = theme => ({
-    views: {
+    root: {
         marginTop: theme.spacing(8),
+        minHeight: '100vh',
     },
     passwordChange: {
         marginTop: theme.spacing(4),
@@ -24,8 +25,9 @@ const useStyles = makeStyles((theme) => ({
         paddingRight: theme.spacing(5),
         borderStyle: "groove",
         borderColor: theme.palette.info.light,
-        maxWidth:500, 
+        //maxWidth:500, 
         alignItems:'stretch',
+       padding: theme.spacing(1, 1, 1, 1),
     },
     legend:{
         backgroundColor: "#FFFAFA",
@@ -33,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
         padding: theme.spacing(1, 1, 1, 1),
     },
     textFieldSelect: {
-        margin: theme.spacing(0,40,3,0),
+        margin: theme.spacing(0,30,3,0),
         backgroundColor: "#FFFFFF",
         maxWidth: 150,
         flexGrow: 1,
@@ -49,11 +51,11 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.primary.main,
     },
     table: {
-        width: 1165,
-        margin: theme.spacing(0, 3, 0, 3),
+        minWidth: 1000,
+        //margin: theme.spacing(0, 1, 0, 1.5),
     },
     paper: {
-        width: 1200,
+        //width: 1000,
         marginBottom: theme.spacing(2),
     },
     container: {
@@ -140,7 +142,6 @@ function MarksSummaryReport(props) {
 
     const classes = useStyles()
     const examMarks = props.examMarks
-    console.log("In Enhanced marks summary report, the value of props.examMarksis => " + JSON.stringify(examMarks))
     return(
         <div>
             <Paper className={classes.paper} elevation={3}>
@@ -148,6 +149,7 @@ function MarksSummaryReport(props) {
                 handleOnDateSelect={props.handleOnDateSelect}
                 choosenDate={props.choosenDate}
             />
+            <TableContainer component={Paper}>
             <Table className={classes.table}>
                 <TableHead>
                     <TableRow>
@@ -168,6 +170,7 @@ function MarksSummaryReport(props) {
                     }
                 </TableBody>
             </Table>
+            </TableContainer>
             </Paper>
         </div>
     )
@@ -177,7 +180,7 @@ function StudentReportCard(props) {
     const classes = useStyles()
     
     return(
-        <Container component='main'>
+        <Container component='main' maxWidth='md'>
             <div className={classes.container}>
                 <EnhancedStudentDetails studentDetails={props.studentReportCardProps.studentDetails} />
                 <MarksSummaryReport
@@ -212,12 +215,12 @@ class Student extends React.Component {
 
     //todo: remember to add an argument to the fxn
     fetchtMarksData = (studentNb, selectedDate) => {
-        console.log(`The value of studentNumber=${studentNb} and the value of selectedDates= ${selectedDate}`)
+        
         request.get(`marks/exam-report/?studentNumber=${studentNb}&examDate=${selectedDate}`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             } else {
-                console.log(res)
+                
                 this.setState({marks: res.body})
                 if(res.body && res.body.length > 0) {
                     this.setState({marksReportLevel: res.body[0].examLevel})
@@ -229,9 +232,9 @@ class Student extends React.Component {
     fetchExamsDates = (studentNb) => {
         request.get(`marks/exam-dates?studentNumber=${studentNb}`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             }else {
-                console.log(res)
+                
                 this.setState({examsDates: res.body})
                 if(res.body && res.body.length > 0) { 
                     this.setState({choosenDate: res.body[0]})
@@ -244,9 +247,9 @@ class Student extends React.Component {
     fetchStudentData = (studentNb) => {
         request.get(`students/${studentNb}`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             } else {
-                console.log(res)
+                
                 this.setState({studentDetails: res.body})
             }
         })
@@ -255,9 +258,9 @@ class Student extends React.Component {
     fetchMarksDataOnComponentMount = (studentNumber) => { 
         request.get(`marks/latest-completely-assessed-exam-session?studentNumber=${studentNumber}`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             } else {
-                console.log(res)
+                
                 this.setState({marks: res.body})
                 if(res.body && res.body.length > 0) {
                     this.setState({marksReportLevel: res.body[0].examLevel})
@@ -314,10 +317,10 @@ class Student extends React.Component {
         return(
             <div>
                 <Header/>
-                <div className={classes.views}>
+                
+                <div className={classes.root}>
                     {this.renderStudentViews(this.props.match.params.option)}
                 </div>
-                
             </div>
         )
     }

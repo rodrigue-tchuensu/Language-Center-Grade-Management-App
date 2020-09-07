@@ -1,40 +1,10 @@
 import React from 'react';
-//import { makeStyles, withStyles } from '@material-ui/core/styles';
 import MaterialTable, { MTableToolbar } from 'material-table';
 import { Button,} from '@material-ui/core';
-import {Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle} from '@material-ui/core';
+import {Dialog,DialogActions, DialogContent, DialogTitle} from '@material-ui/core';
 import DetailInputTag from './DetailInputTag';
 
 const request = require ('../../resources/request');
-
-
-/*
-const useStyles = makeStyles(theme => ({
-    title:{
-        textAlign: 'center',
-        color: theme.palette.primary.main,
-        paddingTop: theme.spacing(3),
-        paddingBottom: theme.spacing(2),
-    },
-    toolbar:{
-        textAlign: 'center',
-    },
-}));
-
-const styles = theme => ({
-    title:{
-        textAlign: 'center',
-        color: theme.palette.primary.main,
-        paddingTop: theme.spacing(3),
-        paddingBottom: theme.spacing(2),
-    },
-    toolbar:{
-        textAlign: 'center',
-    },
-})
-*/
-
-  
 
 class StaffTable extends React.Component {
 
@@ -55,7 +25,7 @@ class StaffTable extends React.Component {
         request.get('staffs/limitedInfos', (err, res) => {
 
             if(err){
-                console.log("Error: fetching staff data using the api failed")
+                
             }
             else {
                 this.setState({data: res.body})
@@ -95,15 +65,14 @@ class StaffTable extends React.Component {
                             icon: 'emoji_people',
                             tooltip: 'More details ...',
                             onClick: (event, rowData) => {
-                                console.log("the value of the StaffNumber is: " + rowData.staffNumber)
+                                
                                 request.get('staffs/' + rowData.staffNumber, (err, res) => {
 
                                     if(err) {
-                                        console.log("Erreur: Could not load the specified staff details")
+                                        
                                     }
                                     else {
-                                        console.log("Succes: The staff detail data was successfully loaded\n You can see the response below")
-                                        console.log(res)
+                                        
                                         this.setState({ detailData: res.body, showDetails: true})
                                     }
                                 })

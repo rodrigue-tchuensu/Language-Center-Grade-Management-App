@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Error, LockOutlined} from '@material-ui/icons';
 import {TextField, Button, CssBaseline, Typography} from '@material-ui/core';
@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
       textAlign: 'center',
   },
   progress: {
-    marginRight: theme.spacing(3),
+    marginRight: theme.spacing(2),
   }
 }));
 
@@ -156,7 +156,7 @@ export default function Login(props) {
               color="primary"
               className={classes.submit}
             >
-              {loading && <CircularProgress color='inherit' size={30} />}
+              {loading && <CircularProgress color='inherit' size={30} className={classes.progress}/>}
               Sign In
             </Button>
           </form>

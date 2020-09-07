@@ -61,7 +61,7 @@ export default function ScheduleExam(props) {
         props.handleScheduleExamCheckBoxChanges(event.target.name, event.target.checked)
     }
 
-    console.log("the scheduleProps are: " + JSON.stringify(props.scheduleExamProps))
+   
     const classes = useStyles()
     const levels = ["A1", "A2", "B1", "B2", "C1"]
     return(

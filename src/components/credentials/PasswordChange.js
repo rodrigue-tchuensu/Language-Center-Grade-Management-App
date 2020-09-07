@@ -64,9 +64,7 @@ export default function ChangeAccountPassword(props) {
           if(err) {
               setError(true)
               seterrorMessage(err.response.body.message)
-              console.log(err.response.body.message)
           } else {
-              console.log(res)
               setOpenDBox(true)
           }
       })

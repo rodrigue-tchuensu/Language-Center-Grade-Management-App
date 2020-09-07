@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
@@ -10,9 +10,6 @@ import {AssessmentTwoTone,StraightenTwoTone, AccountBoxTwoTone, PeopleTwoTone,Da
         PersonAddTwoTone,  ExpandLess, ExpandMore, EditTwoTone, DeleteTwoTone, CalendarTodayTwoTone} from '@material-ui/icons';
 
 const request = require ('../../resources/request');
-
-
-        const drawerWidth = 240;
 
         const styles = theme => ({
           nested: {

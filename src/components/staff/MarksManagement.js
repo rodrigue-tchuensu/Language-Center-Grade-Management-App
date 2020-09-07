@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import MaterialTable, { MTableToolbar } from 'material-table'
-import {Dialog,DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Typography, } from '@material-ui/core';
-import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Toolbar, Paper} from '@material-ui/core';
-import {Button,} from '@material-ui/core';
+import {Dialog,DialogActions, DialogContent, TextField, Typography, Box, } from '@material-ui/core';
+import {Table, TableBody, TableCell, TableHead, TableRow, Toolbar, CircularProgress} from '@material-ui/core';
+import {Button, Container} from '@material-ui/core';
 import {Save} from '@material-ui/icons';
 
 
@@ -22,43 +22,35 @@ const useStyles = makeStyles((theme) => ({
     legend:{
         backgroundColor: "#FFFAFA",
         color: theme.palette.secondary.main,
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        padding: theme.spacing(1, 1, 1, 1),
+    },
+    divFieldset:{
+        textAlign:'center'
     },
     fieldset:{
-        backgroundColor: theme.palette.info.light,
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(8),
+        //backgroundColor: theme.palette.info.light,
+        margin: theme.spacing(4, 0, 6, 0),
         borderStyle: "groove",
         borderColor: theme.palette.info.light,
-        maxWidth:500
-        
+        maxWidth:600,    
     },
     textField: {
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(3),
-        marginRight: theme.spacing(10),
-        marginLeft: theme.spacing(4),
+        margin: theme.spacing(4, 10, 3, 4),
         minWidth: 150,
         //borderColor: theme.palette.secondary.main,
         backgroundColor: "#FFFFFF",
     },
     button: {
-        marginTop: theme.spacing(4),
-        marginBottom: theme.spacing(3),
-        minHeight: 55,
-        minWidth: 150,
+        margin: theme.spacing(4, 0, 3, 0),
+        minHeight: 60,
+        //minWidth: 150,  
     },
     toolbar: {
-        marginTop: theme.spacing(1.5),
-        marginBottom: theme.spacing(1),
+        margin: theme.spacing(1.5, 0, 1,0),
     },
     toolbarMarksSummaryTable: {
         alignItems: 'flex-start',
-        paddingTop: theme.spacing(2),
-        paddingBottom: theme.spacing(2),
+        padding: theme.spacing(2, 0, 2, 0),
     },
     titleMarksSummaryTable: {
         flexGrow: 1,
@@ -71,7 +63,21 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         marginRight: theme.spacing(15)
     },
-    
+    progress: {
+        margin: theme.spacing(0, 1.5, 0, 1),
+    },
+    rowContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+
+    },
+    columnContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+
+    }  
 }));
 
 
@@ -85,8 +91,6 @@ const levels = ["A1", "A2", "B1", "B2", "C1"]
 function MarkAssignmentTable(props) {
 
     const classes = useStyles();
-
-    //const subjects = ["Grammar", "Reading Comprehension", "Listening Comprehension", "Text Production"]
 
     const [score, setScore] = useState(0.0)
     const [selectedSubject, setSelectedSubject] = useState("Grammar")
@@ -111,15 +115,12 @@ function MarkAssignmentTable(props) {
             examLevel: props.examLevel,
         }
 
-
-        //console.log(markDto)
-
         request.post(`marks`, markDto, (err, res) => {
 
             if(err) {
-                console.log(err)
+
             } else {
-                console.log(res)
+
             }
         })
     }
@@ -128,9 +129,9 @@ function MarkAssignmentTable(props) {
         
         request.get(`exams/latest-date`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             } else {
-                console.log(res)
+                
                 setLatestExamDate(res.body)
             }
         })
@@ -226,7 +227,7 @@ function MarksSummaryTable(props) {
 
         request.get(`marks/exam-dates?studentNumber=${studentNumber}`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             } else {
                 setExamsDates(res.body)
                 if(res.body && res.body.length > 0) { 
@@ -238,10 +239,10 @@ function MarksSummaryTable(props) {
     }
 
     const fetchMarksData = (studentNumber, examDate) => {
-        console.log(`The value of  student number:${studentNumber} and that of examDate:${examDate}`)
+        
         request.get(`marks?studentNumber=${studentNumber}&examDate=${examDate}`, (err, res) => {
             if(err) {
-                console.log(err)
+               
             } else {
                 //console.log(res.body)
                 setMarks(res.body)
@@ -256,7 +257,7 @@ function MarksSummaryTable(props) {
 
         request.get(`marks/latest-completely-assessed-exam-session?studentNumber=${studentNumber}`, (err, res) => {
             if(err) {
-                console.log(err)
+                
             } else {
                 //console.log(res)
                 setMarks(res.body)
@@ -343,6 +344,7 @@ export default function MarksManagement(props) {
         const [openSummaryTable, setOpenSummaryTable] = useState(false)
         const [selectedStudentStudentNumber, setSelectedStudentStudentNumber] = useState("")
         const [selectedStudentFullname, setSelectedStudentFullname] = useState("")
+        const [importingStudentsByLevel, setImportingStudentsByLevel] = useState(false)
         
         const classes = useStyles();
        
@@ -356,17 +358,19 @@ export default function MarksManagement(props) {
         const fetchStudentsData = () => {
             request.get(`students/limitedInfos?level=${level}`, (err, res) => {
                 if(err){
-                    console.log(err)
+                    
                 }
                 else {
                     setData(res.body)
                 }
+                setImportingStudentsByLevel(false)
             })
         }
 
         useEffect(() => fetchStudentsData(), [])
 
         const handleImportStudentButtonClick = () => {
+            setImportingStudentsByLevel(true)
             fetchStudentsData()
             setTableTitle(level + "  Students")
         }
@@ -385,12 +389,11 @@ export default function MarksManagement(props) {
         return (
             
             <div>
-
-                <div>
+                <div >
+                <div className={classes.columnContainer}>
                     <fieldset className={classes.fieldset}>
-                        <legend className={classes.legend}>
-                            <Typography variant="h6">Select language level</Typography>
-                        </legend>
+                        
+                        <Container className={classes.container}>
                         <TextField
                             className={classes.textField}
                             id="desiredLevel"
@@ -411,10 +414,14 @@ export default function MarksManagement(props) {
                         </TextField>
                         <Button className={classes.button}
                                 color="primary" variant="contained" 
+                                //size='small'
                                 onClick={handleImportStudentButtonClick}
                         >
-                            {"import " + level + " students"}
+                            <Box className={classes.rowContainer}>
+                                {!importingStudentsByLevel ? `import ${level} students` : <><CircularProgress color='inherit' size={30} className={classes.progress}/> {`Importing ${level} students`} </>}
+                            </Box>
                         </Button>
+                        </Container>
                     </fieldset>
                     
                 </div>
@@ -454,21 +461,6 @@ export default function MarksManagement(props) {
                                 setOpenDialogBox(true)
                                 setSelectedStudentFullname(rowData.name)
                                 setSelectedStudentStudentNumber(rowData.studentNumber)
-                                console.log("the value of the StudentNumber is: " + rowData.studentNumber)
-                                /*request.get('students/' + rowData.studentNumber, (err, res) => {
-
-                                    if(err) {
-                                        console.log("Erreur: Could not load the specified staff details")
-                                    }
-                                    else {
-                                        console.log("Succes: The staff detail data was successfully loaded\n You can see the response below")
-                                        console.log(res)
-                                        //this.setState({ detailDatat: res.body, showDetails: true})
-                                        //setDetailData(res.body)
-                                        //setShowDetails(true)
-                                        //this.setState({showDetails: true})
-                                    }
-                                })*/
                             }
                         }): null),
                         
@@ -491,6 +483,7 @@ export default function MarksManagement(props) {
                                     )
                     }}
                 />
+                </div>
 
                 
                 
