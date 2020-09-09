@@ -23,24 +23,24 @@ As mentioned earlier the application is a system used to manage students grade i
 
    Teacher
 
-The admin user can access the application using the previously stated devices and can perform the following actions:
+The admin can access the application using the previously stated devices and can perform the following actions:
 
 1. Login / Logout
 2. Create a new user account 
 3. See all the users account details except the password
 4. See all student marks
 
-The manager user can perform the following actions:
+The manager can perform the following actions:
 
 1. As the admin user he/she can perform actions 1,3 and 4.
 2. Schedule exams
 
-The teacher user can perform the following actions:
+The teacher can perform the following actions:
 
 1. Login / Logout 
 2. Assess the students individually
 3. See all students marks
-4. Should be able to modify students marks. Only marks they had previously given can they modify  (not yet implemented)
+4. Should be able to modify students marks. Only marks previously attributed by a teacher can be modified by this teacher  (not yet implemented)
 5. See all students accounts details except password
 
 The student user can perform the following actions:
@@ -48,7 +48,7 @@ The student user can perform the following actions:
 1. Login / Logout 
 2. See their marks 
 
-All the users should be able to change their password.(not yet implemented).
+All the users should be able to change their password.
 
 
 
